@@ -12,6 +12,26 @@ module.exports = function (con, app) {
         })
     })
 
+    app.get('/department/:id', function (req, res) {
+        con.query('select * from department where dept_id = ?',[req.params.id], function (err, result) {
+            if (err) {
+                res.status(404).json({ 'fail': 'Not found error' })
+                throw err;
+            }
+            else
+            {
+                if(result.length != 0)
+                {
+                res.status(200).json([{ 'success': 'data retrive success' }, { 'data': result }])
+                }
+                else
+                {
+                    res.status(404).json({ 'fail': 'Not found error' })
+                }
+            }
+        })
+    })
+
     app.post('/department', urlencodedParser, function (req, res) {
         let sql = `INSERT INTO department (dept_name, dept_date_cr) VALUES ( ?,? )`;
         let department = req.body;

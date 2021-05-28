@@ -11,6 +11,25 @@ module.exports = function (con, app) {
                 res.status(200).json([{ 'success': 'data retrive success' }, { 'data': result }])
         })
     })
+    app.get('/salary/:id', function (req, res) {
+        con.query('select * from salary where sal_id = ?',[req.params.id], function (err, result) {
+            if (err) {
+                res.status(404).json({ 'fail': 'Not found error' })
+                throw err;
+            }
+            else
+            {
+                if(result.length != 0)
+                {
+                res.status(200).json([{ 'success': 'data retrive success' }, { 'data': result }])
+                }
+                else
+                {
+                    res.status(404).json({ 'fail': 'Not found error' })
+                }
+            }
+        })
+    })
 
     app.post('/salary', urlencodedParser, function (req, res) {
         let sql = `INSERT INTO salary (emp_id, month, year, amount, generated_date) VALUES ( ?,?,?,?,? )`;
